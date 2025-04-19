@@ -43,29 +43,23 @@ class LoginFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
-        // Check if the user is already logged in
         if (PreferenceManager.isLoggedIn(requireContext())) {
-            // If user is already logged in, navigate directly to HomeFragment
             findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
             return
         }
 
         viewModel.checkIfUserIsAlreadyLoggedIn()
 
-        // Set the onClickListener for the login button
         binding.btnLogin.setOnClickListener {
             LoginEmailPassword()
         }
 
-        // Google Sign-In setup
         viewModel.setupGoogleSignIn(requireContext(), getString(R.string.web_client_id))
 
-        // Google sign-in button click
         binding.googleSigninButton.setOnClickListener {
             googleSignIn()
         }
 
-        // Handle sign-in result
         googleSignInLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
@@ -75,7 +69,6 @@ class LoginFragment : Fragment() {
                 }
             }
 
-        // Observe login results
         observeLoginResults()
     }
 
@@ -85,10 +78,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun observeLoginResults() {
-        // Observe login status and navigate accordingly
         viewModel.userLoggedIn.observe(viewLifecycleOwner) { isLoggedIn ->
             if (isLoggedIn) {
-                // After successful login, save the login state in SharedPreferences
                 PreferenceManager.setLoggedIn(requireContext(), true)
                 findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 Toast.makeText(requireContext(), "Giriş başarılı!", Toast.LENGTH_SHORT).show()
@@ -97,7 +88,6 @@ class LoginFragment : Fragment() {
             }
         }
 
-        // Observe login error messages
         viewModel.loginError.observe(viewLifecycleOwner) { error ->
             if (error != null) {
                 Toast.makeText(requireContext(), "Giriş başarısız: $error", Toast.LENGTH_SHORT).show()
@@ -105,41 +95,33 @@ class LoginFragment : Fragment() {
         }
     }
 
-    // Function to handle email/password login
-    // Function to handle email/password login
     private fun LoginEmailPassword() {
         val email = binding.emailEditText.text.toString().trim()
         val password = binding.passwordEditText.text.toString().trim()
 
-        // Check if email is empty
         if (email.isEmpty()) {
             Toast.makeText(requireContext(), "Lütfen e-posta adresinizi girin.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Check if email is valid
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(requireContext(), "Geçerli bir e-posta adresi girin.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Check if password is empty
         if (password.isEmpty()) {
             Toast.makeText(requireContext(), "Lütfen şifrenizi girin.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // If validation passes, save the credentials
         saveCredentials(email, password)
 
         Toast.makeText(requireContext(), "E-posta: $email", Toast.LENGTH_SHORT).show()
 
-        // After saving, navigate to the HomeFragment (successful login)
-        Toast.makeText(requireContext(), "Giriş başarılı!", Toast.LENGTH_SHORT).show()
+      //  Toast.makeText(requireContext(), "Giriş başarılı!", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
     }
 
-    // Function to save email and password in SharedPreferences
     private fun saveCredentials(email: String, password: String) {
         val editor = sharedPreferences.edit()
         editor.putString("email", email)

@@ -8,5 +8,6 @@ data class Product(
     val id: Int,
     val name: String,
     val price: Double,
-    val imageUrl: Int // Drawable resource ID gibi görünüyor
+    val imageUrl: Int,
+    val categoryName: String
 ) : Parcelable

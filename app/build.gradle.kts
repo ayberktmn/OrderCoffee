@@ -87,4 +87,25 @@ dependencies {
     // Glide dependencies
     implementation("com.github.bumptech.glide:glide:4.15.1")
     kapt("com.github.bumptech.glide:compiler:4.15.1")
+
+    // Room dependencies
+    implementation("androidx.room:room-runtime:2.5.0")  // Room runtime
+    implementation("androidx.room:room-ktx:2.5.0")      // Room KTX for coroutines
+
+    // Room Annotation Processor (KAPT ile)
+    kapt("androidx.room:room-compiler:2.5.0")
+
+    // LiveData Bağımlılığı
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+
+    // Coroutine Bağımlılığı
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    val room_version = "2.7.0"
+
+    implementation("androidx.room:room-runtime:$room_version")
+
+    // If this project only uses Java source, use the Java annotationProcessor
+    // No additional plugins are necessary
+    annotationProcessor("androidx.room:room-compiler:$room_version")
 }

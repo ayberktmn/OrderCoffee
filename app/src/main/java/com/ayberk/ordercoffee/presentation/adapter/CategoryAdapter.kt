@@ -10,10 +10,11 @@ import com.ayberk.ordercoffee.R
 import com.ayberk.ordercoffee.presentation.model.Category
 import com.google.android.material.button.MaterialButton
 
-class CategoryAdapter(private val categories: List<Category>) :
-    RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
-
-    private var selectedPosition = 0
+class CategoryAdapter(
+    private val categories: List<Category>,
+    private val onCategoryClick: (String) -> Unit
+) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+    private var selectedPosition = -1
 
     inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val btnCategory: MaterialButton = itemView.findViewById(R.id.btnCategory)
@@ -28,9 +29,9 @@ class CategoryAdapter(private val categories: List<Category>) :
     override fun getItemCount(): Int = categories.size
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        holder.btnCategory.text = categories[position].name
+        val category = categories[position]
+        holder.btnCategory.text = category.name
 
-        // Seçili mi?
         if (position == selectedPosition) {
             holder.btnCategory.setBackgroundColor(
                 ContextCompat.getColor(holder.itemView.context, R.color.coffee_espresso)
@@ -43,7 +44,9 @@ class CategoryAdapter(private val categories: List<Category>) :
 
         holder.btnCategory.setOnClickListener {
             selectedPosition = holder.adapterPosition
-            notifyDataSetChanged() // Tüm görünümü güncelle
+            notifyDataSetChanged()
+
+            onCategoryClick(category.name) // TIKLANAN KATEGORİYİ GÖNDERİYORUM
         }
     }
 }

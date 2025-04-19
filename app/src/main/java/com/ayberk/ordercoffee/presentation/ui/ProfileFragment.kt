@@ -41,19 +41,16 @@ class ProfileFragment : Fragment() {
 
 
         binding.btnSignOut.setOnClickListener {
-            viewModel.signOut()  // Google veya backend çıkışı burada yapılıyor
-            logout()  // SharedPreferences ve logout işlemi burada yapılacak
+            viewModel.signOut()
+            logout()
 
-            // Gecikmeli olarak login ekranına yönlendir
             Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
             }, 100)
         }
     }
 
-    // Clear SharedPreferences and log out
     private fun logout() {
-        // Clear SharedPreferences
         PreferenceManager.clear(requireContext())
     }
 

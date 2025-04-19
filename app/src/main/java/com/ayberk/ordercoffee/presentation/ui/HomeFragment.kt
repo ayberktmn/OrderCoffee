@@ -38,9 +38,10 @@ class HomeFragment : Fragment() {
     )
 
     private val categoryList = listOf(
-        Category(1, "Sıcak İçecekler"),
-        Category(2, "Soğuk İçecekler"),
-        Category(3, "Yiyecekler")
+        Category(1, "Tümü"),
+        Category(2, "Sıcak İçecekler"),
+        Category(3, "Soğuk İçecekler"),
+        Category(4, "Yiyecekler")
     )
 
     override fun onCreateView(
@@ -68,9 +69,10 @@ class HomeFragment : Fragment() {
         // Category RecyclerView
         binding.categoryRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.categoryRecyclerView.adapter = CategoryAdapter(categoryList)
+        binding.categoryRecyclerView.adapter = CategoryAdapter(categoryList) { selectedCategory ->
+            productViewModel.filterProductsByCategory(selectedCategory)
+        }
 
-        // Ürün listesi ve gözlem
         setupRecyclerView()
         observeProducts()
     }

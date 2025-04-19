@@ -16,7 +16,7 @@ class ImageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // ❗ arguments'tan image id'yi önce al
+        // ❗ arguments'tan image id'yi önce alıyorum
         arguments?.let {
             imageResId = it.getInt("image_res")
         }
@@ -27,7 +27,7 @@ class ImageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentImageBinding.inflate(inflater, container, false)
-        // ✅ Artık imageResId doğru, burada kullanabilirsin
+        // imageResId burada kullanıyoruz
         binding.imageView.setImageResource(imageResId)
         return binding.root
     }
