@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.ayberk.ordercoffee.databinding.FragmentDetailsBinding
@@ -27,6 +28,12 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val product = args.selectedProduct
+
+        val toolbar = binding.include.customToolbar
+        toolbar.title = "Ürün Detayı"
+
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+
 
         binding.apply {
             coffeeName.text = product.name

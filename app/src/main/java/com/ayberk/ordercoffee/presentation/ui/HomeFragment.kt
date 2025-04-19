@@ -56,9 +56,10 @@ class HomeFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
-        // Toolbar başlığını değiştirme
-        val actionBar = (activity as AppCompatActivity).supportActionBar
-        actionBar?.title = "Anasayfa"  // ActionBar başlığını da değiştirebiliriz
+        val toolbar = binding.include.customToolbar
+        toolbar.title = "Anasayfa"
+
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
 
         // ViewPager2 banner
         val adapter = ImagePagerAdapter(this, bannerImages)
@@ -79,13 +80,13 @@ class HomeFragment : Fragment() {
             val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(selectedProduct)
             findNavController().navigate(action)
         }
-        binding.productsRecyclerView.apply {
-            val layoutManager = LinearLayoutManager(context)
-            layoutManager.orientation = LinearLayoutManager.VERTICAL
-            binding.productsRecyclerView.layoutManager = layoutManager
 
+        binding.productsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = productAdapter
         }
     }
+
 
     private fun observeProducts() {
         productViewModel.productList.observe(viewLifecycleOwner) { productList ->

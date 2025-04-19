@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.setDecorFitsSystemWindows(window, true)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
 
 
@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.loginFragment -> binding.bottomNavigation.visibility = android.view.View.GONE
+                R.id.detailsFragment -> binding.bottomNavigation.visibility = android.view.View.GONE
                 else -> binding.bottomNavigation.visibility = android.view.View.VISIBLE
             }
         }
