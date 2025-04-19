@@ -1,0 +1,18 @@
+package com.ayberk.ordercoffee.presentation.adapter
+
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.ayberk.ordercoffee.presentation.ui.ImageFragment
+
+class ImagePagerAdapter(fragment: Fragment, private val images: List<Int>) : FragmentStateAdapter(fragment) {
+
+    // Return the number of items (images)
+    override fun getItemCount(): Int {
+        return images.size
+    }
+
+    // Create a fragment for each image
+    override fun createFragment(position: Int): Fragment {
+        return ImageFragment.newInstance(images[position])
+    }
+}

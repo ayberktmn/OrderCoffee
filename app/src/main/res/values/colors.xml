@@ -1,0 +1,18 @@
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Coffee Tones -->
+    <color name="coffee_espresso">#4B2E2B</color>       <!-- Koyu espresso -->
+    <color name="coffee_mocha">#704214</color>          <!-- Mocha -->
+    <color name="coffee_caramel">#AF6E4D</color>        <!-- Karamel -->
+    <color name="coffee_latte">#CBAE8E</color>          <!-- Açık latte -->
+    <color name="coffee_cappuccino">#A1866F</color>     <!-- Cappuccino -->
+    <color name="coffee_cream">#F5E1CE</color>          <!-- Kahve kreması -->
+    <color name="coffee_milk">#EAD2B7</color>           <!-- Sütlü kahve -->
+    <color name="coffee_roast">#3E2723</color>          <!-- Kavrulmuş kahve çekirdeği -->
+
+    <!-- Bottom Navigation Colors -->
+    <color name="bottom_nav_selected">#CBAE8E</color>  <!-- Seçili item rengi (Açık Latte) -->
+    <color name="bottom_nav_unselected">#FF000000</color> <!-- Seçili olmayan item rengi (Koyu) -->
+</resources>

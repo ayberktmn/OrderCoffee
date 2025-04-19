@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.OrderCoffee" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Status bar rengini kahverengi yap -->
+        <item name="android:statusBarColor">@color/coffee_espresso</item>
+
+        <!-- Eğer ikonlar koyu görünüyorsa bu satırı da ekleyebilirsin: -->
+        <!-- <item name="android:windowLightStatusBar">true</item> -->
+    </style>
+
+    <style name="Theme.OrderCoffee" parent="Base.Theme.OrderCoffee" />
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.button.MaterialButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/btnCategory"
+    android:layout_width="wrap_content"
+    android:layout_height="40dp"
+    android:layout_marginEnd="8dp"
+    android:text="Kategori"
+    android:textColor="@color/black"
+    android:textSize="14sp"
+    android:paddingHorizontal="16dp"
+    app:cornerRadius="20dp"
+    app:backgroundTint="@color/white"
+    app:strokeColor="@color/black"
+    app:strokeWidth="1dp"
+    app:iconPadding="0dp"
+    app:iconGravity="textStart" />
