@@ -18,6 +18,9 @@ import com.ayberk.ordercoffee.R
 import com.ayberk.ordercoffee.databinding.FragmentLoginBinding
 import com.ayberk.ordercoffee.presentation.viewmodel.LoginViewModel
 import com.ayberk.ordercoffee.util.PreferenceManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
 
 class LoginFragment : Fragment() {
 
@@ -43,7 +46,7 @@ class LoginFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
-        // Kullanıcı zaten giriş yapmışsa, homeFragment'e yönlendir
+        // Check if the user is already logged in
         if (PreferenceManager.isLoggedIn(requireContext())) {
             findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
             return
@@ -52,7 +55,7 @@ class LoginFragment : Fragment() {
         viewModel.checkIfUserIsAlreadyLoggedIn()
 
         binding.btnLogin.setOnClickListener {
-            LoginEmailPassword()
+            loginWithEmailPassword()
         }
 
         viewModel.setupGoogleSignIn(requireContext(), getString(R.string.web_client_id))
@@ -64,7 +67,14 @@ class LoginFragment : Fragment() {
         googleSignInLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
-                    viewModel.handleSignInResult(result.data)
+                    val signInTask = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                    try {
+                        val signInAccount = signInTask.getResult(ApiException::class.java)
+                        viewModel.handleSignInResult(signInAccount)
+                    } catch (e: ApiException) {
+                        // Handle error
+                        Toast.makeText(requireContext(), "Google giriş hatası: ${e.statusCode}", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(requireContext(), "Google giriş iptal edildi", Toast.LENGTH_SHORT).show()
                 }
@@ -81,7 +91,6 @@ class LoginFragment : Fragment() {
     private fun observeLoginResults() {
         viewModel.userLoggedIn.observe(viewLifecycleOwner) { isLoggedIn ->
             if (isLoggedIn) {
-                // Kullanıcı giriş yaptıysa, giriş durumu kaydedilsin
                 PreferenceManager.setLoggedIn(requireContext(), true)
                 findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 Toast.makeText(requireContext(), "Giriş başarılı!", Toast.LENGTH_SHORT).show()
@@ -95,7 +104,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun LoginEmailPassword() {
+    private fun loginWithEmailPassword() {
         val email = binding.emailEditText.text.toString().trim()
         val password = binding.passwordEditText.text.toString().trim()
 
@@ -116,8 +125,7 @@ class LoginFragment : Fragment() {
 
         saveCredentials(email, password)
 
-        // Başarılı girişte, kullanıcıyı homeFragment'e yönlendirin
-        PreferenceManager.setLoggedIn(requireContext(), true)
+        Toast.makeText(requireContext(), "E-posta: $email", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
     }
 
