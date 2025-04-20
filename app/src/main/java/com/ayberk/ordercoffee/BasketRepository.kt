@@ -5,14 +5,17 @@ import com.ayberk.ordercoffee.data.local.dao.BasketDao
 import com.ayberk.ordercoffee.presentation.model.BasketProduct
 import javax.inject.Inject
 
+
 class BasketRepository @Inject constructor(private val basketDao: BasketDao) {
 
-    suspend fun getAllBasketItems(): List<BasketProduct> {
+    suspend fun insertIfNotExists(basketProduct: BasketProduct) {
+        if (!basketDao.exists(basketProduct.id)) {
+            basketDao.insertToBasket(basketProduct)
+        }
+    }
+
+    suspend fun getAllBasketProducts(): List<BasketProduct> {
         return basketDao.getAllBasketItems()
     }
-
-    suspend fun insertProduct(product: BasketProduct) {
-        basketDao.insertToBasket(product)
-    }
-
 }
+

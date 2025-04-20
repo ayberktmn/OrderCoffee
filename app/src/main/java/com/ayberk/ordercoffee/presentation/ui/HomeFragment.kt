@@ -79,10 +79,6 @@ class HomeFragment : Fragment() {
             productViewModel.filterProductsByCategory(selectedCategory)
         }
 
-        basketViewModel.basketItems.observe(viewLifecycleOwner) {
-            // UI'yı güncelle
-        }
-
         setupRecyclerView()
         observeProducts()
     }
@@ -100,15 +96,17 @@ class HomeFragment : Fragment() {
                 categoryName = product.categoryName,
                 quantity = 1
             )
-            basketViewModel.addProductToBasket(basketProduct) { addedProduct ->
-                Toast.makeText(requireContext(), "${addedProduct.name} sepete eklendi", Toast.LENGTH_SHORT).show()
-            }
+            basketViewModel.addProductToBasket(basketProduct,
+                onAdded = { addedProduct ->
+                    Toast.makeText(requireContext(), "${addedProduct.name} sepete eklendi", Toast.LENGTH_SHORT).show()
+                },
+                onAlreadyExists = {
+                    Toast.makeText(requireContext(), "${product.name} zaten sepette var", Toast.LENGTH_SHORT).show()
+                })
         })
 
-        binding.productsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = productAdapter
-        }
+        binding.productsRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.productsRecyclerView.adapter = productAdapter
     }
 
     private fun observeProducts() {

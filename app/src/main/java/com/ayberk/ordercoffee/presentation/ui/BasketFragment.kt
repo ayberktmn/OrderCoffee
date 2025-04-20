@@ -1,6 +1,7 @@
 package com.ayberk.ordercoffee.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayberk.ordercoffee.databinding.FragmentBasketBinding
 import com.ayberk.ordercoffee.presentation.adapter.BasketAdapter
-import com.ayberk.ordercoffee.presentation.model.BasketProduct
 import com.ayberk.ordercoffee.presentation.viewmodel.BasketViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,23 +22,33 @@ class BasketFragment : Fragment() {
 
     private lateinit var basketAdapter: BasketAdapter
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentBasketBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentBasketBinding.bind(view)
-
+        // RecyclerView'i kur
         setupRecyclerView()
 
         // Sepet ürünlerini gözlemliyoruz
         basketViewModel.basketItems.observe(viewLifecycleOwner, Observer { basketProducts ->
-            basketAdapter.updateList(basketProducts) // Sepet ürünleri değiştikçe RecyclerView'ı güncelliyoruz
+            // Sepet ürünleri değiştikçe RecyclerView'ı güncelliyoruz
+            basketAdapter.updateList(basketProducts)
         })
+
+        // Sepet ürünlerini yükle
+        basketViewModel.getBasketItems()
     }
 
     private fun setupRecyclerView() {
         basketAdapter = BasketAdapter(emptyList()) { basketProduct ->
             // Sepetteki ürünle ilgili işlem yapılabilir (örneğin silme)
-        //    basketViewModel.addProductToBasket(basketProduct)
         }
 
         binding.rvBasket.layoutManager = LinearLayoutManager(context)

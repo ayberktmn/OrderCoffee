@@ -18,15 +18,26 @@ class BasketAdapter(
             binding.apply {
                 // Ürün adı ve fiyatını yerleştir
                 tvProductName.text = item.name
-                tvProductPrice.text = "${item.price}₺"
-                tvProductQuantity.text = "Miktar: ${item.quantity}"
+                tvProductPrice.text = "${item.getTotalPrice()}₺" // Toplam fiyatı göster
+                tvProductQuantity.text = "Miktar: ${item.quantity}" // Miktar gösterimi
+                ivProductImage.setImageResource(item.imageUrl)
 
-                // Ürün resmini yerleştir
-                // Eğer imageUrl URL ise Glide veya Picasso gibi kütüphaneleri kullanabilirsiniz
-                // Glide.with(itemView.context).load(item.imageUrl).into(ivProductImage)
+                // Azaltma butonuna tıklandığında miktarı azalt
+                decreaseQuantity.setOnClickListener {
+                    item.decreaseQuantity() // Miktarı azalt
+                    tvProductQuantity.text = "Miktar: ${item.quantity}" // Miktarı güncelle
+                    tvProductPrice.text = "${item.getTotalPrice()}₺" // Fiyatı güncelle
+                }
 
+                // Artırma butonuna tıklandığında miktarı artır
+                increaseQuantity.setOnClickListener {
+                    item.increaseQuantity() // Miktarı artır
+                    tvProductQuantity.text = "Miktar: ${item.quantity}" // Miktarı güncelle
+                    tvProductPrice.text = "${item.getTotalPrice()}₺" // Fiyatı güncelle
+                }
+
+                // Ürüne tıklandığında yapılacak işlemi belirleyin
                 root.setOnClickListener {
-                    // Ürüne tıklandığında yapılacak işlemi belirleyin
                     onItemClick(item)
                 }
             }

@@ -20,12 +20,30 @@ class BasketViewModel @Inject constructor(
     private val _basketItems = MutableLiveData<List<BasketProduct>>()
     val basketItems: LiveData<List<BasketProduct>> = _basketItems
 
-    fun addProductToBasket(product: BasketProduct, onAdded: (BasketProduct) -> Unit) {
+    // Sepete ürün ekleme fonksiyonu
+    fun addProductToBasket(product: BasketProduct, onAdded: (BasketProduct) -> Unit, onAlreadyExists: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
-            basketRepository.insertProduct(product)
+            // Sepette ürün var mı kontrol et
+            if (basketRepository.getAllBasketProducts().none { it.id == product.id }) {
+                // Eğer yoksa ekle
+                basketRepository.insertIfNotExists(product)
+                withContext(Dispatchers.Main) {
+                    onAdded(product)
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    onAlreadyExists()
+                }
+            }
+        }
+    }
 
+    // Sepetteki tüm ürünleri al
+    fun getBasketItems() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val items = basketRepository.getAllBasketProducts() // Room'dan veri al
             withContext(Dispatchers.Main) {
-                onAdded(product)
+                _basketItems.value = items // Veriyi LiveData'ya aktar
             }
         }
     }

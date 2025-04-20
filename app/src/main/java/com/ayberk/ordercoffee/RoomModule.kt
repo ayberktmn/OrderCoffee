@@ -22,19 +22,26 @@ object RoomModule {
             AppDatabase::class.java,
             "order_coffee_database"
         )
-            // Eski veritabanı verilerini silip yeni veritabanını oluştur
+            // Veritabanı şeması değişirse, eski veritabanını siler ve yeni veritabanını oluşturur
             .fallbackToDestructiveMigration()
             .build()
     }
 
     @Provides
-    fun provideFavoriteDao(database: AppDatabase): FavoriteDao {
-        return database.favoriteDao()
-    }
-
-    @Provides
+    @Singleton
     fun provideBasketDao(database: AppDatabase): BasketDao {
         return database.basketDao()
     }
 
+    @Provides
+    @Singleton
+    fun provideBasketRepository(basketDao: BasketDao): BasketRepository {
+        return BasketRepository(basketDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteDao(database: AppDatabase): FavoriteDao {
+        return database.favoriteDao()
+    }
 }

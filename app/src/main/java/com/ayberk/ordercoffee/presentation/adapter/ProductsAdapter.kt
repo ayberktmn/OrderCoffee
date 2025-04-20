@@ -27,13 +27,7 @@ class ProductsAdapter(
         holder.binding.apply {
             tvProductName.text = product.name
             tvProductPrice.text = "${product.price}₺"
-
-            // Eğer imageUrl bir String (URL) ise Glide kullan:
-            Glide.with(ivProductImage.context)
-                .load(product.imageUrl)
-                .placeholder(R.drawable.kahveler) // varsa
-                .into(ivProductImage)
-
+            ivProductImage.setImageResource(product.imageUrl)
             btnBuy.setOnClickListener {
                 onAddToBasketClick(product)
             }
