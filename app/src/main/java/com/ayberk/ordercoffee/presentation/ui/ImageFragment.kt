@@ -7,18 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import com.ayberk.ordercoffee.R
 import com.ayberk.ordercoffee.databinding.FragmentImageBinding
+import com.bumptech.glide.Glide
 
 class ImageFragment : Fragment() {
 
-    private var imageResId: Int = 0
-    private var _binding: FragmentImageBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentImageBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // ❗ arguments'tan image id'yi önce alıyorum
-        arguments?.let {
-            imageResId = it.getInt("image_res")
+    companion object {
+        private const val ARG_IMAGE = "image_url"
+
+        fun newInstance(imageUrl: String): ImageFragment {
+            val fragment = ImageFragment()
+            val args = Bundle()
+            args.putString(ARG_IMAGE, imageUrl)
+            fragment.arguments = args
+            return fragment
         }
     }
 
@@ -26,24 +29,25 @@ class ImageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentImageBinding.inflate(inflater, container, false)
-        // imageResId burada kullanıyoruz
-        binding.imageView.setImageResource(imageResId)
+        binding = FragmentImageBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val imageUrl = arguments?.getString(ARG_IMAGE) ?: return
 
-    companion object {
-        fun newInstance(imageResId: Int): ImageFragment {
-            val fragment = ImageFragment()
-            val args = Bundle()
-            args.putInt("image_res", imageResId)
-            fragment.arguments = args
-            return fragment
+        val context = binding.imageView.context
+
+        if (imageUrl.startsWith("http")) {
+            Glide.with(context)
+                .load(imageUrl)
+                .into(binding.imageView)
+        } else {
+            val resId = context.resources.getIdentifier(imageUrl, "drawable", context.packageName)
+            Glide.with(context)
+                .load(resId)
+                .error(R.drawable.kahveee) // yedek görsel
+                .into(binding.imageView)
         }
     }
 }

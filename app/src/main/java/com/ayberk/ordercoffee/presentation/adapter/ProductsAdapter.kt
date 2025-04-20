@@ -3,6 +3,7 @@ package com.ayberk.ordercoffee.presentation.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ayberk.ordercoffee.R
 import com.ayberk.ordercoffee.databinding.ItemProductBinding
 import com.ayberk.ordercoffee.presentation.model.Product
 import com.bumptech.glide.Glide
@@ -25,7 +26,7 @@ class ProductsAdapter(
         holder.binding.apply {
             tvProductName.text = product.name
             tvProductPrice.text = "${product.price}₺"
-            Glide.with(ivProductImage.context).load(product.imageUrl).into(ivProductImage)
+            ivProductImage.setImageResource(product.imageUrl)
 
             root.setOnClickListener {
                 onItemClick(product)

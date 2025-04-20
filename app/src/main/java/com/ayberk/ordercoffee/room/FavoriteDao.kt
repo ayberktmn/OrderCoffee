@@ -16,7 +16,14 @@ interface FavoriteDao {
     @Delete
     fun delete(favoriteProduct: FavoriteProduct)
 
-    @Query("SELECT * FROM FavoriteProduct WHERE id = :id")
-    fun getById(id: Int): FavoriteProduct?
+    @Query("SELECT EXISTS(SELECT 1 FROM FavoriteProduct WHERE id = :id)")
+    fun exists(id: Int): Boolean
 
+    // Ürünü yalnızca veritabanında yoksa ekleyin
+    suspend fun insertIfNotExists(favoriteProduct: FavoriteProduct) {
+        if (!exists(favoriteProduct.id)) {
+            insert(favoriteProduct)
+        }
+    }
 }
+

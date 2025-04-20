@@ -32,9 +32,9 @@ class HomeFragment : Fragment() {
     private val productViewModel: ProductViewModel by viewModels()
 
     private val bannerImages = listOf(
-        R.drawable.kahve,
-        R.drawable.kahveler,
-        R.drawable.kahveee
+        "https://www.deryauluduz.com/wp-content/uploads/2021/10/kahve-ne-ise-yariyor.jpg",
+        "https://staresso.com/cdn/shop/articles/What_is_a_latte.jpg?v=1716606481",
+        "https://www.unileverfoodsolutions.com.tr/konsept-uygulamalarimiz/yemek-trendleri/soguk-kahve-rehberi/jcr:content/parsys/content/image_copy_copy_1171292015.img.jpg/1627594954156.jpg"
     )
 
     private val categoryList = listOf(

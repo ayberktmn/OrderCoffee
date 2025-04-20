@@ -76,7 +76,7 @@
                     android:id="@+id/coffeePrice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Coffee Description"
+                    android:text="Coffee Price"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/coffeeName"
@@ -87,8 +87,8 @@
                 <!-- Favorite Icon (Heart) -->
                 <ImageView
                     android:id="@+id/favoriteIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/notfavorite"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/coffeePrice"
@@ -96,6 +96,18 @@
                     android:layout_marginStart="8dp"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                android:id="@+id/coffeePricee"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Açıklaması Yakında...."
+                android:textSize="20sp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/coffeeName"
+                app:layout_constraintEnd_toStartOf="@+id/favoriteIcon"
+                android:maxLines="1"
+                android:ellipsize="end"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

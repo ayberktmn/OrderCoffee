@@ -37,15 +37,24 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val product = args.selectedProduct // Seçilen ürün bilgisi
+        val product = args.selectedProduct // Selected product information
 
-        // Toolbar'ı ayarlama
+        // Set up the toolbar
         val toolbar = binding.include.customToolbar
-        toolbar.title = "Ürün Detayı"
+        toolbar.title = "Product Details"
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
 
+        // Enable the back button in the toolbar
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // Handle back button click event
+        toolbar.setNavigationOnClickListener {
+            // Navigate back when the back button is clicked
+            requireActivity().onBackPressed()
+        }
+
         binding.apply {
-            // Kahve bilgilerini bağlama
+            // Set product details
             coffeeName.text = product.name
             coffeePrice.text = "${product.price}₺"
 
@@ -53,24 +62,37 @@ class DetailsFragment : Fragment() {
                 .load(product.imageUrl)
                 .into(coffeeImage)
 
-            // Favoriye ekleme butonu tıklama işlemi
+            // Check if the product is a favorite and update UI
+            favoriteViewModel.checkIfFavorite(product.id)
+
+            // Observe the favorite status and update the favorite icon
+            favoriteViewModel.isFavorite.observe(viewLifecycleOwner) { isFavorite ->
+                val iconRes = if (isFavorite) R.drawable.favoritee else R.drawable.notfavorite
+                favoriteIcon.setImageResource(iconRes)
+            }
+
+            // Add or remove product from favorites when clicked
             favoriteIcon.setOnClickListener {
-                // Seçilen kahve ürününü favorilere ekleme
                 val favoriteProduct = product.toFavoriteProduct()
 
-                // ViewModel'e ekleme işlemi için çağrı yapıyoruz
-                favoriteViewModel.addFavoriteProduct(favoriteProduct)
+                if (favoriteViewModel.isFavorite.value == true) {
+                    // Remove product from favorites
+                    favoriteViewModel.deleteFavoriteProduct(favoriteProduct)
+                } else {
+                    // Add product to favorites
+                    favoriteViewModel.addFavoriteProduct(favoriteProduct)
+                }
             }
         }
     }
 
-    // Product'ı FavoriteProduct'a dönüştürme
+    // Convert Product to FavoriteProduct
     private fun Product.toFavoriteProduct(): FavoriteProduct {
         return FavoriteProduct(
-            id = this.id, // Ürün ID'sini ekliyoruz
+            id = this.id,
             name = this.name,
             price = this.price,
-            imageUrl = this.imageUrl.toString(),
+            imageUrl = this.imageUrl,
             category = this.categoryName
         )
     }

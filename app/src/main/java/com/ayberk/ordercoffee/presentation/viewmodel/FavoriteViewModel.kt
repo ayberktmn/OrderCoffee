@@ -1,5 +1,6 @@
 package com.ayberk.ordercoffee.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.ayberk.ordercoffee.room.FavoriteProduct
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,26 +19,53 @@ class FavoriteViewModel @Inject constructor(private val favoriteDao: FavoriteDao
     private val _favoriteProducts = MutableLiveData<List<FavoriteProduct>>()
     val favoriteProducts: LiveData<List<FavoriteProduct>> get() = _favoriteProducts
 
-    // Favori ürünü veritabanına eklemek
-    fun addFavoriteProduct(product: FavoriteProduct) {
-        val favoriteProduct = FavoriteProduct(
-            name = product.name,
-            price = product.price,
-            imageUrl = product.imageUrl,
-            category = product.category
-        )
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
 
-        // Veritabanı işlemini arka planda yapıyoruz (viewModelScope içinde)
-        viewModelScope.launch(Dispatchers.IO) { // IO dispatcher kullanıyoruz
-            favoriteDao.insert(favoriteProduct)
-            loadFavoriteProducts()  // Favori ürünleri yüklemek
+    private val _isFavorite = MutableLiveData<Boolean>()
+    val isFavorite: LiveData<Boolean> get() = _isFavorite
+
+    // Add favorite product to database
+    fun addFavoriteProduct(product: FavoriteProduct) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteDao.insertIfNotExists(product)
+            _isFavorite.postValue(true) // Update the state to true
+            loadFavoriteProducts()  // Reload the favorite products
         }
     }
 
-    // Favori ürünleri yüklemek
-    fun loadFavoriteProducts() {
+    fun checkIfFavorite(productId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            _favoriteProducts.postValue(favoriteDao.getAll())
+            val isFavorite = favoriteDao.exists(productId)
+            _isFavorite.postValue(isFavorite) // Update the state based on the query result
+        }
+    }
+
+    // Check if product is already a favorite
+    suspend fun isFavorite(productId: Int): Boolean {
+        return withContext(Dispatchers.IO) {
+            favoriteDao.exists(productId)
+        }
+    }
+
+    // Remove favorite product from database
+    fun deleteFavoriteProduct(product: FavoriteProduct) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteDao.delete(product)
+            _isFavorite.postValue(false) // Update the state to false
+            loadFavoriteProducts()  // Reload the favorite products
+        }
+    }
+
+    // Load all favorite products
+    fun loadFavoriteProducts() {
+        _isLoading.postValue(true)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val data = favoriteDao.getAll()
+            _favoriteProducts.postValue(data)
+            _isLoading.postValue(false)
         }
     }
 }
+

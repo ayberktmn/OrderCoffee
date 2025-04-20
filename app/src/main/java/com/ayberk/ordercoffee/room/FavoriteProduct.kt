@@ -9,7 +9,7 @@ data class FavoriteProduct(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "price") val price: Double,
-    @ColumnInfo(name = "imageUrl") val imageUrl: String,
+    @ColumnInfo(name = "imageUrl") val imageUrl: Int,
     @ColumnInfo(name = "category") val category: String
 )
 

@@ -10,7 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)  // Uygulama genelinde geçerli olması için SingletonComponent
+@InstallIn(SingletonComponent::class)
 object RoomModule {
 
     @Provides
@@ -20,11 +20,14 @@ object RoomModule {
             app,
             AppDatabase::class.java,
             "order_coffee_database"
-        ).build()
+        )
+            // Eski veritabanı verilerini silip yeni veritabanını oluştur
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
     fun provideFavoriteDao(database: AppDatabase): FavoriteDao {
-        return database.favoriteDao()  // Veritabanı nesnesi üzerinden DAO'yu sağlıyoruz
+        return database.favoriteDao()
     }
 }

@@ -14,4 +14,9 @@
         android:id="@+id/profileFragment"
         android:icon="@drawable/user"
         android:title="Profil" />
+
+    <item
+        android:id="@+id/basketFragment"
+        android:icon="@drawable/basket"
+        android:title="Sepet" />
 </menu>
