@@ -43,6 +43,7 @@ class LoginFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
+        // Kullanıcı zaten giriş yapmışsa, homeFragment'e yönlendir
         if (PreferenceManager.isLoggedIn(requireContext())) {
             findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
             return
@@ -80,11 +81,10 @@ class LoginFragment : Fragment() {
     private fun observeLoginResults() {
         viewModel.userLoggedIn.observe(viewLifecycleOwner) { isLoggedIn ->
             if (isLoggedIn) {
+                // Kullanıcı giriş yaptıysa, giriş durumu kaydedilsin
                 PreferenceManager.setLoggedIn(requireContext(), true)
                 findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 Toast.makeText(requireContext(), "Giriş başarılı!", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), "Giriş başarısız oldu!", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -116,9 +116,8 @@ class LoginFragment : Fragment() {
 
         saveCredentials(email, password)
 
-        Toast.makeText(requireContext(), "E-posta: $email", Toast.LENGTH_SHORT).show()
-
-      //  Toast.makeText(requireContext(), "Giriş başarılı!", Toast.LENGTH_SHORT).show()
+        // Başarılı girişte, kullanıcıyı homeFragment'e yönlendirin
+        PreferenceManager.setLoggedIn(requireContext(), true)
         findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
     }
 
@@ -128,8 +127,6 @@ class LoginFragment : Fragment() {
         editor.putString("password", password)
         editor.apply()
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

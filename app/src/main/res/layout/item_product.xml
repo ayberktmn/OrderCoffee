@@ -40,7 +40,7 @@
 
             <TextView
                 android:id="@+id/tvProductName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Ürün Adı"
                 android:textSize="16sp"
@@ -49,7 +49,7 @@
 
             <TextView
                 android:id="@+id/tvProductPrice"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="₺34.99"
                 android:textSize="14sp"

@@ -20,81 +20,81 @@
             android:src="@drawable/kahveler"/>
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
+            android:orientation="vertical"
             android:paddingStart="16dp">
 
             <!-- Ürün Adı -->
             <TextView
                 android:id="@+id/tvProductName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Product Name"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <!-- Ürün Fiyatı -->
             <TextView
                 android:id="@+id/tvProductPrice"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="10₺"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <!-- Ürün Miktarı -->
             <TextView
                 android:id="@+id/tvProductQuantity"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Miktar: 1"
-                android:textStyle="bold"
+                android:textColor="@color/coffee_mocha"
                 android:textSize="14sp"
-                android:textColor="@color/coffee_mocha"/>
+                android:textStyle="bold" />
 
         </LinearLayout>
 
 
         <LinearLayout
-            android:layout_width="178dp"
+            android:layout_width="111dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
-            android:layout_gravity="center"
             android:paddingStart="16dp">
 
             <!-- Azaltma Butonu -->
             <TextView
                 android:id="@+id/decrease_quantity"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:background="@color/coffee_latte"
                 android:gravity="center"
                 android:text="-"
                 android:textColor="@android:color/black"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <!-- Artırma Butonu -->
             <TextView
                 android:id="@+id/increase_quantity"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="4dp"
                 android:background="@color/coffee_latte"
                 android:gravity="center"
                 android:text="+"
-                android:layout_marginStart="4dp"
                 android:textColor="@android:color/black"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <ImageView
                 android:id="@+id/img_Delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/delete" />
         </LinearLayout>
