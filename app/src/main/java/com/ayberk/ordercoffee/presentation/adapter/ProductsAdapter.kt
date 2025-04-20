@@ -9,8 +9,9 @@ import com.ayberk.ordercoffee.presentation.model.Product
 import com.bumptech.glide.Glide
 
 class ProductsAdapter(
-    private val productList: List<Product>,
-    private val onItemClick: (Product) -> Unit
+    private var productList: List<Product>,
+    private val onItemClick: (Product) -> Unit,
+    private val onAddToBasketClick: (Product) -> Unit
 ) : RecyclerView.Adapter<ProductsAdapter.ProductViewHolder>() {
 
     inner class ProductViewHolder(val binding: ItemProductBinding) :
@@ -26,7 +27,16 @@ class ProductsAdapter(
         holder.binding.apply {
             tvProductName.text = product.name
             tvProductPrice.text = "${product.price}₺"
-            ivProductImage.setImageResource(product.imageUrl)
+
+            // Eğer imageUrl bir String (URL) ise Glide kullan:
+            Glide.with(ivProductImage.context)
+                .load(product.imageUrl)
+                .placeholder(R.drawable.kahveler) // varsa
+                .into(ivProductImage)
+
+            btnBuy.setOnClickListener {
+                onAddToBasketClick(product)
+            }
 
             root.setOnClickListener {
                 onItemClick(product)
@@ -34,6 +44,10 @@ class ProductsAdapter(
         }
     }
 
+    fun updateList(newList: List<Product>) {
+        productList = newList
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int = productList.size
 }
-

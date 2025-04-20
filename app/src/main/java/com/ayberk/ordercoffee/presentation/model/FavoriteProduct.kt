@@ -1,4 +1,4 @@
-package com.ayberk.ordercoffee.room
+package com.ayberk.ordercoffee.presentation.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

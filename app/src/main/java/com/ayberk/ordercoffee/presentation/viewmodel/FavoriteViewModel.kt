@@ -1,12 +1,11 @@
 package com.ayberk.ordercoffee.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ayberk.ordercoffee.room.FavoriteDao
-import com.ayberk.ordercoffee.room.FavoriteProduct
+import com.ayberk.ordercoffee.presentation.model.FavoriteProduct
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -2,6 +2,7 @@ package com.ayberk.ordercoffee
 
 import android.app.Application
 import androidx.room.Room
+import com.ayberk.ordercoffee.data.local.dao.BasketDao
 import com.ayberk.ordercoffee.room.FavoriteDao
 import dagger.Module
 import dagger.Provides
@@ -30,4 +31,10 @@ object RoomModule {
     fun provideFavoriteDao(database: AppDatabase): FavoriteDao {
         return database.favoriteDao()
     }
+
+    @Provides
+    fun provideBasketDao(database: AppDatabase): BasketDao {
+        return database.basketDao()
+    }
+
 }

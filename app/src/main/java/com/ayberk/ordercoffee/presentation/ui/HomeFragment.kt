@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,10 +19,14 @@ import com.ayberk.ordercoffee.presentation.model.Category
 import com.ayberk.ordercoffee.presentation.adapter.CategoryAdapter
 import com.ayberk.ordercoffee.presentation.adapter.ImagePagerAdapter
 import com.ayberk.ordercoffee.presentation.adapter.ProductsAdapter
+import com.ayberk.ordercoffee.presentation.model.BasketProduct
+import com.ayberk.ordercoffee.presentation.viewmodel.BasketViewModel
 import com.ayberk.ordercoffee.presentation.viewmodel.LoginViewModel
 import com.ayberk.ordercoffee.presentation.viewmodel.ProductViewModel
 import com.ayberk.ordercoffee.util.PreferenceManager
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -30,6 +35,7 @@ class HomeFragment : Fragment() {
     private lateinit var productAdapter: ProductsAdapter
 
     private val productViewModel: ProductViewModel by viewModels()
+    private val basketViewModel: BasketViewModel by viewModels()
 
     private val bannerImages = listOf(
         "https://www.deryauluduz.com/wp-content/uploads/2021/10/kahve-ne-ise-yariyor.jpg",
@@ -73,30 +79,41 @@ class HomeFragment : Fragment() {
             productViewModel.filterProductsByCategory(selectedCategory)
         }
 
+        basketViewModel.basketItems.observe(viewLifecycleOwner) {
+            // UI'yı güncelle
+        }
+
         setupRecyclerView()
         observeProducts()
     }
 
     private fun setupRecyclerView() {
-        productAdapter = ProductsAdapter(emptyList()) { selectedProduct ->
+        productAdapter = ProductsAdapter(emptyList(), { selectedProduct ->
             val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(selectedProduct)
             findNavController().navigate(action)
-        }
+        }, { product -> // Sepete ekle
+            val basketProduct = BasketProduct(
+                id = product.id,
+                name = product.name,
+                price = product.price,
+                imageUrl = product.imageUrl,
+                categoryName = product.categoryName,
+                quantity = 1
+            )
+            basketViewModel.addProductToBasket(basketProduct) { addedProduct ->
+                Toast.makeText(requireContext(), "${addedProduct.name} sepete eklendi", Toast.LENGTH_SHORT).show()
+            }
+        })
 
         binding.productsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(context)
             adapter = productAdapter
         }
     }
 
-
     private fun observeProducts() {
         productViewModel.productList.observe(viewLifecycleOwner) { productList ->
-            productAdapter = ProductsAdapter(productList) { selectedProduct ->
-                val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(selectedProduct)
-                findNavController().navigate(action)
-            }
-            binding.productsRecyclerView.adapter = productAdapter
+            productAdapter.updateList(productList)
         }
     }
 

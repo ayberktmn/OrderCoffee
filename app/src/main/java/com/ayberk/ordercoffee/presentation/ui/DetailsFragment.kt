@@ -7,16 +7,14 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.ayberk.ordercoffee.R
 import com.ayberk.ordercoffee.databinding.FragmentDetailsBinding
 import com.ayberk.ordercoffee.presentation.model.Product
 import com.ayberk.ordercoffee.presentation.viewmodel.FavoriteViewModel
-import com.ayberk.ordercoffee.room.FavoriteProduct
+import com.ayberk.ordercoffee.presentation.model.FavoriteProduct
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {

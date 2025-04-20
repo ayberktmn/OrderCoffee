@@ -3,10 +3,8 @@ package com.ayberk.ordercoffee.presentation.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ayberk.ordercoffee.R
 import com.ayberk.ordercoffee.databinding.ItemFavoriteBinding
-import com.ayberk.ordercoffee.room.FavoriteProduct
-import com.bumptech.glide.Glide
+import com.ayberk.ordercoffee.presentation.model.FavoriteProduct
 
 class FavoriteAdapter(
     private var favoriteList: List<FavoriteProduct>
