@@ -1,0 +1,59 @@
+<!-- item_basket.xml -->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Ürün Resmi -->
+        <ImageView
+            android:id="@+id/ivProductImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/kahveler"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="16dp">
+
+            <!-- Ürün Adı -->
+            <TextView
+                android:id="@+id/tvProductName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product Name"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <!-- Ürün Fiyatı -->
+            <TextView
+                android:id="@+id/tvProductPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10₺"
+                android:textSize="14sp"/>
+
+            <!-- Ürün Miktarı -->
+            <TextView
+                android:id="@+id/tvProductQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Miktar: 1"
+                android:textSize="14sp"
+                android:textColor="#888888"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
