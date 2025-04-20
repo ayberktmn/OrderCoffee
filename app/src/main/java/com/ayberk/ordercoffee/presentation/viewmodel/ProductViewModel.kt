@@ -15,13 +15,13 @@ class ProductViewModel @Inject constructor() : ViewModel() {
     val productList: LiveData<List<Product>> get() = _productList
 
     private val allProducts = listOf(
-        Product(1, "Latte", 99.99, R.drawable.latte, "Sıcak İçecekler"),
-        Product(2, "Cappuccino", 120.50, R.drawable.cup, "Soğuk İçecekler"),
+        Product(1, "Latte", 99.00, R.drawable.latte, "Sıcak İçecekler"),
+        Product(2, "Cappuccino", 120.00, R.drawable.cup, "Soğuk İçecekler"),
         Product(3, "Americano", 90.00, R.drawable.kahveee, "Sıcak İçecekler"),
         Product(4, "Espresso", 110.00, R.drawable.turkkahvesi, "Soğuk İçecekler"),
         Product(5, "Filtre Kahve", 70.00, R.drawable.kahveler, "Sıcak İçecekler"),
         Product(6, "Soğuk Kahve", 80.00, R.drawable.kahveee, "Soğuk İçecekler"),
-        Product(7, "Pizza", 50.00, R.drawable.pizza, "Yiyecekler")
+        Product(7, "Pizza", 150.00, R.drawable.pizza, "Yiyecekler")
     )
 
     init {

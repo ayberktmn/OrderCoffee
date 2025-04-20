@@ -7,7 +7,7 @@ import com.ayberk.ordercoffee.room.FavoriteDao
 import com.ayberk.ordercoffee.presentation.model.BasketProduct
 import com.ayberk.ordercoffee.presentation.model.FavoriteProduct
 
-@Database(entities = [FavoriteProduct::class, BasketProduct::class], version = 4)
+@Database(entities = [FavoriteProduct::class, BasketProduct::class], version = 5)
 abstract class AppDatabase : RoomDatabase() {
     // Favorite ürünler için DAO
     abstract fun favoriteDao(): FavoriteDao
@@ -15,4 +15,5 @@ abstract class AppDatabase : RoomDatabase() {
     // Basket ürünler için DAO
     abstract fun basketDao(): BasketDao
 }
+
 

@@ -9,7 +9,9 @@ import com.ayberk.ordercoffee.presentation.model.BasketProduct
 class BasketAdapter(
     private var basketList: List<BasketProduct>,
     private val onItemClick: (BasketProduct) -> Unit,
-    private val onItemDelete: (BasketProduct) -> Unit
+    private val onItemDelete: (BasketProduct) -> Unit,
+    val onIncreaseClicked: (BasketProduct) -> Unit,
+    val onDecreaseClicked: (BasketProduct) -> Unit
 ) : RecyclerView.Adapter<BasketAdapter.BasketItemViewHolder>() {
 
     inner class BasketItemViewHolder(private val binding: ItemBasketBinding) :
@@ -24,27 +26,23 @@ class BasketAdapter(
                 ivProductImage.setImageResource(item.imageUrl)
 
                 // Azaltma butonuna tıklandığında miktarı azalt
-                decreaseQuantity.setOnClickListener {
-                    item.decreaseQuantity() // Miktarı azalt
-                    tvProductQuantity.text = "Miktar: ${item.quantity}" // Miktarı güncelle
-                    tvProductPrice.text = String.format("%.0f₺", item.getTotalPrice()) // Fiyatı güncelle
-                }
-
-                // Artırma butonuna tıklandığında miktarı artır
                 increaseQuantity.setOnClickListener {
-                    item.increaseQuantity() // Miktarı artır
-                    tvProductQuantity.text = "Miktar: ${item.quantity}" // Miktarı güncelle
-                    tvProductPrice.text = String.format("%.0f₺", item.getTotalPrice()) // Fiyatı güncelle
+                    onIncreaseClicked(item)
                 }
 
-                binding.imgDelete.setOnClickListener {
-                    onItemDelete(item) // Silme işlemi başlatılır
-
+                decreaseQuantity.setOnClickListener {
+                    onDecreaseClicked(item)
                 }
 
-                // Ürüne tıklandığında yapılacak işlemi belirleyin
+
+                // Ürüne tıklanırsa
                 root.setOnClickListener {
                     onItemClick(item)
+                }
+
+                // Silme işlemi başlatılır
+                imgDelete.setOnClickListener {
+                    onItemDelete(item) // Silme işlemi başlatılır
                 }
             }
         }
@@ -64,7 +62,8 @@ class BasketAdapter(
     // Listeyi güncellemek için kullanılır
     fun updateList(newList: List<BasketProduct>) {
         basketList = newList
-        notifyDataSetChanged()
+        notifyDataSetChanged() // Bu çağrı UI'yı günceller
     }
 }
+
 

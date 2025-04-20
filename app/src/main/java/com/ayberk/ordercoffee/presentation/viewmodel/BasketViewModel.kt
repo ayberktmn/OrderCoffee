@@ -39,12 +39,41 @@ class BasketViewModel @Inject constructor(
         }
     }
 
+    // Sepetten ürün silme fonksiyonu
     fun deleteProductById(productId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             basketRepository.deleteProductById(productId)
+            getBasketItems()  // Sepet ürünleri güncelleniyor
+        }
+    }
+
+    fun increaseQuantity(product: BasketProduct) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val updatedProduct = product.copy(quantity = product.quantity + 1)
+            basketRepository.updateProduct(updatedProduct)
             getBasketItems()
         }
     }
+
+    // Miktarı azalt (1'in altına düşmesine izin verme)
+    fun decreaseQuantity(product: BasketProduct) {
+        if (product.quantity > 1) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val updatedProduct = product.copy(quantity = product.quantity - 1)
+                basketRepository.updateProduct(updatedProduct)
+                getBasketItems()
+            }
+        }
+    }
+
+    // Güncelle
+    fun updateBasketProduct(product: BasketProduct) {
+        viewModelScope.launch(Dispatchers.IO) {
+            basketRepository.updateProduct(product)
+            getBasketItems()
+        }
+    }
+
 
 
     // Sepetteki tüm ürünleri al
@@ -57,3 +86,4 @@ class BasketViewModel @Inject constructor(
         }
     }
 }
+

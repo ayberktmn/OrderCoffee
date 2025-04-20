@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -37,30 +39,46 @@ class BasketFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val toolbar = binding.include.customToolbar
+        toolbar.title = "Sepetim"
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+
         // RecyclerView'i kur
         setupRecyclerView()
 
         // Sepet ürünlerini gözlemliyoruz
         basketViewModel.basketItems.observe(viewLifecycleOwner, Observer { basketProducts ->
-            // Sepet ürünleri değiştikçe RecyclerView'ı güncelliyoruz
             basketAdapter.updateList(basketProducts)
+
+            // Toplam tutarı hesapla ve güncelle
+            val totalAmount = basketProducts.sumOf { it.getTotalPrice() }
+            binding.tvTotalAmount.text = "₺${totalAmount.toInt()}"
         })
+
+        binding.btnCheckout.setOnClickListener {
+            showCheckoutSummary()
+        }
 
         // Sepet ürünlerini yükle
         basketViewModel.getBasketItems()
     }
 
+    fun Double.format(digits: Int) = "%.0f".format(this)
+
     private fun setupRecyclerView() {
         basketAdapter = BasketAdapter(
             basketList = emptyList(),
             onItemClick = { basketProduct ->
-                // Burada bir ürün tıklama işlemi ekleyebilirsiniz
                 Log.d("BasketFragment", "Product clicked: ${basketProduct.name}")
             },
             onItemDelete = { basketProduct ->
-                // Silme işlemi için onItemDelete fonksiyonu
                 showDeleteConfirmationDialog(basketProduct)
-
+            },
+            onIncreaseClicked = { basketProduct ->
+                basketViewModel.increaseQuantity(basketProduct)
+            },
+            onDecreaseClicked = { basketProduct ->
+                basketViewModel.decreaseQuantity(basketProduct)
             }
         )
 
@@ -88,6 +106,45 @@ class BasketFragment : Fragment() {
         val negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
         negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
     }
+
+    private fun showCheckoutSummary() {
+        val basketItems = basketViewModel.basketItems.value ?: emptyList()
+
+        if (basketItems.isEmpty()) {
+            Toast.makeText(requireContext(), "Sepetiniz boş!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val summary = StringBuilder()
+        var totalPrice = 0.0
+
+        basketItems.forEach { item ->
+            summary.append("${item.name} x${item.quantity} = ${item.getTotalPrice()}₺\n")
+            totalPrice += item.getTotalPrice()
+        }
+
+        summary.append("\nToplam: %.2f₺".format(totalPrice))
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Sipariş Özeti")
+            .setMessage(summary.toString())
+            .setPositiveButton("Onayla") { d, _ ->
+                d.dismiss()
+                Toast.makeText(requireContext(), "Siparişiniz alındı!", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("İptal") { d, _ ->
+                d.dismiss()
+            }
+            .create()
+
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(ContextCompat.getColor(requireContext(), R.color.coffee_caramel))
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        }
+
+        dialog.show()
+    }
+
 
 }
 

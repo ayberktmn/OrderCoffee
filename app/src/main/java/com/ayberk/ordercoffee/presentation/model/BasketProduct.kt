@@ -17,7 +17,7 @@ data class BasketProduct (
     }
 
     fun decreaseQuantity() {
-        if (quantity > 1) { // Miktar 1'den küçük olmasın
+        if (quantity > 1) {  // Miktar 1'den küçük olmasın
             quantity--
         }
     }
