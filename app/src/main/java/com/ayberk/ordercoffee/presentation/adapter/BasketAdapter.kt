@@ -8,7 +8,8 @@ import com.ayberk.ordercoffee.presentation.model.BasketProduct
 
 class BasketAdapter(
     private var basketList: List<BasketProduct>,
-    private val onItemClick: (BasketProduct) -> Unit
+    private val onItemClick: (BasketProduct) -> Unit,
+    private val onItemDelete: (BasketProduct) -> Unit
 ) : RecyclerView.Adapter<BasketAdapter.BasketItemViewHolder>() {
 
     inner class BasketItemViewHolder(private val binding: ItemBasketBinding) :
@@ -18,7 +19,7 @@ class BasketAdapter(
             binding.apply {
                 // Ürün adı ve fiyatını yerleştir
                 tvProductName.text = item.name
-                tvProductPrice.text = "${item.getTotalPrice()}₺" // Toplam fiyatı göster
+                tvProductPrice.text = String.format("%.0f₺", item.getTotalPrice()) // Küsüratsız fiyat göster
                 tvProductQuantity.text = "Miktar: ${item.quantity}" // Miktar gösterimi
                 ivProductImage.setImageResource(item.imageUrl)
 
@@ -26,14 +27,19 @@ class BasketAdapter(
                 decreaseQuantity.setOnClickListener {
                     item.decreaseQuantity() // Miktarı azalt
                     tvProductQuantity.text = "Miktar: ${item.quantity}" // Miktarı güncelle
-                    tvProductPrice.text = "${item.getTotalPrice()}₺" // Fiyatı güncelle
+                    tvProductPrice.text = String.format("%.0f₺", item.getTotalPrice()) // Fiyatı güncelle
                 }
 
                 // Artırma butonuna tıklandığında miktarı artır
                 increaseQuantity.setOnClickListener {
                     item.increaseQuantity() // Miktarı artır
                     tvProductQuantity.text = "Miktar: ${item.quantity}" // Miktarı güncelle
-                    tvProductPrice.text = "${item.getTotalPrice()}₺" // Fiyatı güncelle
+                    tvProductPrice.text = String.format("%.0f₺", item.getTotalPrice()) // Fiyatı güncelle
+                }
+
+                binding.imgDelete.setOnClickListener {
+                    onItemDelete(item) // Silme işlemi başlatılır
+
                 }
 
                 // Ürüne tıklandığında yapılacak işlemi belirleyin
@@ -61,3 +67,4 @@ class BasketAdapter(
         notifyDataSetChanged()
     }
 }
+

@@ -19,6 +19,10 @@ interface BasketDao {
     @Query("SELECT EXISTS(SELECT 1 FROM BASKET_TABLE WHERE id = :id)")
     fun exists(id: Int): Boolean
 
+    @Query("DELETE FROM basket_table WHERE id = :productId")
+    fun deleteById(productId: Int)
+
+
     suspend fun insertIfNotExists(basketProduct: BasketProduct) {
         if (!exists(basketProduct.id)) {
             insertToBasket(basketProduct)

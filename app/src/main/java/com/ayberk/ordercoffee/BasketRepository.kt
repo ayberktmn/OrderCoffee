@@ -17,5 +17,13 @@ class BasketRepository @Inject constructor(private val basketDao: BasketDao) {
     suspend fun getAllBasketProducts(): List<BasketProduct> {
         return basketDao.getAllBasketItems()
     }
+
+    suspend fun deleteProductById(productId: Int) {
+        basketDao.deleteById(productId)
+    }
+
+    suspend fun exists(id: Int): Boolean {
+        return basketDao.exists(id)
+    }
 }
 

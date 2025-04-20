@@ -1,5 +1,6 @@
 package com.ayberk.ordercoffee.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,6 +38,14 @@ class BasketViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteProductById(productId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            basketRepository.deleteProductById(productId)
+            getBasketItems()
+        }
+    }
+
 
     // Sepetteki tüm ürünleri al
     fun getBasketItems() {
